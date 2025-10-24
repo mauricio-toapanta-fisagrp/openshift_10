@@ -1,0 +1,36 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: openshift-1-git-s2i10
+  namespace: mauricio-toapanta-dev
+  label:
+    app: openshift-1-git-s2i10
+spec:
+  lookupPolicy:
+    local: false
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: openshift-1-git-s2i10
+  namespace: mauricio-toapanta-dev
+  label:
+    app: openshift-1-git-s2i10
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/mauricio-toapanta-fisagrp/openshift_10.git
+      ref: main
+    contextDir: ''
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+  output:
+    to: 
+      kind: ImageStreamTag
+      name: "openshift-1-git-s2i10:latest"
+postCommit:
+    script: |
+      oc rollout restart deployment/mi-deployment-m10 -n mauricio-toapanta-dev || true

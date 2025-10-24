@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mi-deployment-m
+  name: mi-deployment-m10
   namespace: mauricio-toapanta-dev
   labels:
-    app: mi-app
+    app: mi-app10
     areanegocio: tecnologia
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mi-app
+      app: mi-app10
   template:
     metadata:
       labels:
-        app: mi-app
+        app: mi-app10
     spec:
       containers:
         - name: contenedor-principal
@@ -32,25 +32,25 @@ spec:
               memory: "1500Mi"
           envFrom:
             - configMapRef:
-                name: mi-configmap-m
+                name: mi-configmap-m10
             - secretRef:
-                name: mi-secret-m
+                name: mi-secret-m10
           volumeMounts:
-            - name: datos-m2
+            - name: datos-m10
               mountPath: "/app/data"
       volumes:
-        - name: datos-m2
+        - name: datos-m10
           persistentVolumeClaim:
-            claimName: mi-pvc-m3
+            claimName: mi-pvc-m10
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mi-servicio-m
+  name: mi-servicio-m10
   namespace: mauricio-toapanta-dev  # Asegúrate de que coincida con tu Deployment
 spec:
   selector:
-    app: mi-app  # Debe coincidir con las labels del Deployment
+    app: mi-app10  # Debe coincidir con las labels del Deployment
   ports:
     - protocol: TCP
       port: 4000        # Puerto del Service
@@ -60,7 +60,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mi-configmap-m
+  name: mi-configmap-m10
   namespace: mauricio-toapanta-dev
 data:
   DATABASE: "192.168.1.1"
@@ -69,7 +69,7 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mi-secret-m
+  name: mi-secret-m10
   namespace: mauricio-toapanta-dev
 type: Opaque
 data:
@@ -78,13 +78,13 @@ data:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: mi-hpa
+  name: mi-hpa10
   namespace: mauricio-toapanta-dev
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: deployment
-    name: mi-deployment-m
+    name: mi-deployment-m10
   minReplicas: 1
   maxReplicas: 5
   metrics:
@@ -98,7 +98,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mi-pvc-m3
+  name: mi-pvc-m10
   namespace: mauricio-toapanta-dev
 spec:
   accessModes:
